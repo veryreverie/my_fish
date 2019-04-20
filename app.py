@@ -23,7 +23,7 @@ class PlayerType(Enum):
 class App:
     def __init__(self, players, display = True, 
                        bot_time_limit_ms = 5000, disable_time_limit = False,
-                       pieces=None, cols=7, rows=17):
+                       pieces=None, cols=7, rows=17, seed=None):
         self.display = display
 
         self._running = True
@@ -63,7 +63,7 @@ class App:
                 from bots.wariobot import WarioBot
                 self.controllers.append(WarioBot(i))
 
-        self.board = GameBoard(len(players), pieces=pieces, cols=cols, rows=rows)
+        self.board = GameBoard(len(players), pieces=pieces, cols=cols, rows=rows, seed=seed)
 
         self.pending_action = None
 
@@ -263,9 +263,14 @@ if __name__ == "__main__" :
                         choices = [x.name.lower() for x in PlayerType],
                         default=['human','random'],
                         help = 'Players.')
+    parser.add_argument('--seed',
+                        type=int,
+                        default=None,
+                        help='Random seed.')
     args = parser.parse_args()
     
     # Parse players and start app.
     players = [PlayerType[x.upper()] for x in args.players]
-    theApp = App(players, bot_time_limit_ms=5000)#, cols=5, rows=5)
+    seed = args.seed
+    theApp = App(players, bot_time_limit_ms=5000, seed=seed)#, cols=5, rows=5)
     theApp.on_execute()

@@ -20,7 +20,9 @@ tile_palette = [
 ]
 
 class GameBoard:
-    def __init__(self, nplayers, pieces=None, cols=7, rows=17):
+    def __init__(self, nplayers, pieces=None, cols=7, rows=17, seed=None):
+        random.seed(seed)
+        
         self.board = {} # Coords : Tile
         self.offset = hex_coords.ODD
 
